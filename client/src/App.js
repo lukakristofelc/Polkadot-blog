@@ -10,7 +10,7 @@ const { ContractPromise } = require('@polkadot/api-contract');
 
 function App() {
   const wsUrl = 'ws://localhost:9944';
-  const contractAddress = '5FhtYdiyMp7qWLUjENfFkysAnVJRjr8yNMJyPb5EQzzdxp25';
+  const contractAddress = '5FteXJWBrMARAbzYPn6GHubDfwiPPHKvpZuBQqd2BLTs7vkk';
 
   const [dataList, setDataList] = useState([]);
   const [input, setInput] = useState('');
@@ -62,13 +62,11 @@ function App() {
     
   }
 
+  console.log(dataList);
 
   useEffect(()=>{
     getPosts();
   }, [])
-
-
-  console.log(dataList[0]['timestamp'].toLocaleString());
 
   if (account == '') 
   {

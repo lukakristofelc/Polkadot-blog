@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0x963851693e99d2cc7edc16de2c0d575b4515ffbfb5ede9eaac38e13532d14ad0",
+    "hash": "0x9d1857e3205fdf6a2e2c3745cf58beb4377449a33b8d6fcd75652e3a6427ef63",
     "language": "ink! 3.3.1",
     "compiler": "rustc 1.65.0-nightly"
   },
@@ -47,7 +47,7 @@
                 "displayName": [
                   "String"
                 ],
-                "type": 2
+                "type": 5
               }
             }
           ],
@@ -93,14 +93,14 @@
             "composite": {
               "fields": [
                 {
-                  "name": "vsebina",
+                  "name": "avtor",
                   "type": 2,
-                  "typeName": "String"
+                  "typeName": "AccountId"
                 },
                 {
-                  "name": "avtor",
-                  "type": 3,
-                  "typeName": "AccountId"
+                  "name": "vsebina",
+                  "type": 5,
+                  "typeName": "String"
                 },
                 {
                   "name": "timestamp",
@@ -112,7 +112,7 @@
           },
           "path": [
             "objava",
-            "objava",
+            "blog",
             "Objava"
           ]
         }
@@ -121,18 +121,10 @@
         "id": 2,
         "type": {
           "def": {
-            "primitive": "str"
-          }
-        }
-      },
-      {
-        "id": 3,
-        "type": {
-          "def": {
             "composite": {
               "fields": [
                 {
-                  "type": 4,
+                  "type": 3,
                   "typeName": "[u8; 32]"
                 }
               ]
@@ -146,13 +138,21 @@
         }
       },
       {
-        "id": 4,
+        "id": 3,
         "type": {
           "def": {
             "array": {
               "len": 32,
-              "type": 5
+              "type": 4
             }
+          }
+        }
+      },
+      {
+        "id": 4,
+        "type": {
+          "def": {
+            "primitive": "u8"
           }
         }
       },
@@ -160,7 +160,7 @@
         "id": 5,
         "type": {
           "def": {
-            "primitive": "u8"
+            "primitive": "str"
           }
         }
       },
