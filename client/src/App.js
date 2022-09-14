@@ -8,14 +8,13 @@ const { WsProvider, ApiPromise } = require('@polkadot/api');
 const { ContractPromise } = require('@polkadot/api-contract');
 
 function App() {
-  const wsUrl = 'ws://localhost:9944';
   const contractAddress = '5D217sKE1MMr87TCxBeLA5xa6ZnVPVWbxhSXPxNVmTSPwBDw';
 
   const [dataList, setDataList] = useState([]);
   const [input, setInput] = useState('');
   const [account, setAccount] = useState('');
 
-  let gasLimit = 74999922688;
+  let gasLimit = -1;
 
   const orderPosts = (accounts) => {
     console.log(accounts.slice());
@@ -23,10 +22,20 @@ function App() {
   }
 
   async function connectExtension() {    
-    const extensions = await web3Enable('Polkadot Blogchain');
+    await web3Enable('Polkadot Blogchain');
     const allAccounts = await web3Accounts();
     setAccount(allAccounts[0]);
   }
+
+  async function connectContract() {
+    let ws = new WsProvider("ws://localhost:9944");
+    let api = await ApiPromise.create({ provider: ws });
+    let contract = new ContractPromise(api, metadata, contractAddress);
+
+    return contract;
+  }
+
+  
 
   async function updatePosts() {
     if (!input) return
@@ -34,23 +43,15 @@ function App() {
     const contract = await connectContract();
     const injector = await web3FromSource(account.meta.source);
 
-    await contract.tx['add']({ gasLimit }, input ).signAndSend(account.address, { signer: injector.signer });
+    await contract.tx.add({ gasLimit }, input ).signAndSend(account.address, { signer: injector.signer });
 
     setInput('');
     getPosts();
   }
 
-  async function connectContract() {
-    let ws = new WsProvider(wsUrl);
-    let wsApi = await ApiPromise.create({ provider: ws });
-    let contract = new ContractPromise(wsApi, metadata, contractAddress);
-
-    return contract;
-  }
-
   async function getPosts() {
     const contract = await connectContract();
-    let { output } = await contract.query['get'](account.address, { gasLimit });
+    let { output } = await contract.query.get(account.address, { gasLimit });
     setDataList(orderPosts(output));
   }
 
