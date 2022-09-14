@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import * as metadata from "./metadata.json"
 import { useState, useEffect } from 'react';
@@ -10,7 +9,7 @@ const { ContractPromise } = require('@polkadot/api-contract');
 
 function App() {
   const wsUrl = 'ws://localhost:9944';
-  const contractAddress = '5FteXJWBrMARAbzYPn6GHubDfwiPPHKvpZuBQqd2BLTs7vkk';
+  const contractAddress = '5D217sKE1MMr87TCxBeLA5xa6ZnVPVWbxhSXPxNVmTSPwBDw';
 
   const [dataList, setDataList] = useState([]);
   const [input, setInput] = useState('');
@@ -23,46 +22,37 @@ function App() {
     return accounts.slice().sort((a, b) => b['timestamp'] - a['timestamp'])
   }
 
-  async function connectExtention() {    
+  async function connectExtension() {    
     const extensions = await web3Enable('Polkadot Blogchain');
     const allAccounts = await web3Accounts();
     setAccount(allAccounts[0]);
   }
 
-  async function update() {
+  async function updatePosts() {
     if (!input) return
 
+    const contract = await connectContract();
+    const injector = await web3FromSource(account.meta.source);
+
+    await contract.tx['add']({ gasLimit }, input ).signAndSend(account.address, { signer: injector.signer });
+
+    setInput('');
+    getPosts();
+  }
+
+  async function connectContract() {
     let ws = new WsProvider(wsUrl);
     let wsApi = await ApiPromise.create({ provider: ws });
     let contract = new ContractPromise(wsApi, metadata, contractAddress);
-    
-    const injector = await web3FromSource(account.meta.source);
 
-    await contract.tx['add']({ gasLimit }, input ).signAndSend(account.address, { signer: injector.signer }, ({ status }) => {
-      if (status.isInBlock) {
-          console.log(`Completed at block hash #${status.asInBlock.toString()}`);
-      } else {
-          console.log(`Current status: ${status.type}`);
-      }
-    }).catch((error) => {
-        console.log(':( transaction failed', error);
-    });
-
-    setInput('');    
-    setTimeout(getPosts(), 1000);
+    return contract;
   }
 
   async function getPosts() {
-    let ws = new WsProvider(wsUrl);
-    let wsApi = await ApiPromise.create({ provider: ws });
-    let contract = new ContractPromise(wsApi, metadata, contractAddress);
-
-    let { result, output } = await contract.query['get'](account.address, { gasLimit });
+    const contract = await connectContract();
+    let { output } = await contract.query['get'](account.address, { gasLimit });
     setDataList(orderPosts(output));
-    
   }
-
-  console.log(dataList);
 
   useEffect(()=>{
     getPosts();
@@ -75,7 +65,7 @@ function App() {
         <h1 style={{textAlign: 'center'}}>POLKADOT BLOGCHAIN</h1>
         <p style={{textAlign: 'center'}}>Please connect the Polkadot.js browser extension to continue:</p>
         <div style={{ display: 'flex', justifyContent: 'center', marginTop:'20px' }}>
-          <button onClick={connectExtention}>CONNECT POLKADOT.js EXTENSION</button>
+          <button onClick={connectExtension}>CONNECT POLKADOT.js EXTENSION</button>
         </div>
       </div>
     )
@@ -97,7 +87,7 @@ function App() {
                   rows="8" cols="50"
                 />
                 <br/>
-                <button onClick={update}>OBJAVI</button>
+                <button onClick={updatePosts}>OBJAVI</button>
               </div>
             )
           }
