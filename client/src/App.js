@@ -3,9 +3,8 @@ import * as metadata from "./metadata.json"
 import { useState, useEffect } from 'react';
 import { Objava } from './Components/ObjavaComponent/ObjavaComponent'
 import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';
-
-const { WsProvider, ApiPromise } = require('@polkadot/api');
-const { ContractPromise } = require('@polkadot/api-contract');
+import { WsProvider, ApiPromise } from '@polkadot/api';
+import { ContractPromise } from '@polkadot/api-contract'
 
 function App() {
   const contractAddress = '5D217sKE1MMr87TCxBeLA5xa6ZnVPVWbxhSXPxNVmTSPwBDw';
@@ -35,7 +34,7 @@ function App() {
     return contract;
   }
 
-  
+
 
   async function updatePosts() {
     if (!input) return
