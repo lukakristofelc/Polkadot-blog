@@ -33,12 +33,12 @@ mod blog {
         }
 
         #[ink(message)]
-        pub fn get(&self) -> Vec<Objava> {
+        pub fn vseObjave(&self) -> Vec<Objava> {
             self.objave.clone()
         }
 
         #[ink(message)]
-        pub fn add(&mut self, new_message: String) {
+        pub fn dodajObjavo(&mut self, new_message: String) {
             self.objave.push(Objava{
                 avtor: self.env().caller(),
                 vsebina: new_message,

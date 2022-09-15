@@ -7,7 +7,7 @@ import { WsProvider, ApiPromise } from '@polkadot/api';
 import { ContractPromise } from '@polkadot/api-contract'
 
 function App() {
-  const contractAddress = '5D217sKE1MMr87TCxBeLA5xa6ZnVPVWbxhSXPxNVmTSPwBDw';
+  const contractAddress = '5Cbba5zdy9xMfgRjJMW9oHYRtoPSL16xYrp7R8yNYoEzDGV4';
 
   const [dataList, setDataList] = useState([]);
   const [input, setInput] = useState('');
@@ -34,15 +34,13 @@ function App() {
     return contract;
   }
 
-
-
   async function updatePosts() {
     if (!input) return
 
     const contract = await connectContract();
     const injector = await web3FromSource(account.meta.source);
 
-    await contract.tx.add({ gasLimit }, input ).signAndSend(account.address, { signer: injector.signer });
+    await contract.tx.dodajObjavo({ gasLimit }, input ).signAndSend(account.address, { signer: injector.signer });
 
     setInput('');
     getPosts();
@@ -50,7 +48,7 @@ function App() {
 
   async function getPosts() {
     const contract = await connectContract();
-    let { output } = await contract.query.get(account.address, { gasLimit });
+    let { output } = await contract.query.vseObjave(account.address, { gasLimit });
     setDataList(orderPosts(output));
   }
 

@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0x9d1857e3205fdf6a2e2c3745cf58beb4377449a33b8d6fcd75652e3a6427ef63",
+    "hash": "0x361f1862ead8cc10cbdba23d0e996be3c7733ccb0461d72ff9b53eceeb195570",
     "language": "ink! 3.3.1",
     "compiler": "rustc 1.65.0-nightly"
   },
@@ -28,7 +28,7 @@
         {
           "args": [],
           "docs": [],
-          "label": "get",
+          "label": "vseObjave",
           "mutates": false,
           "payable": false,
           "returnType": {
@@ -37,7 +37,7 @@
             ],
             "type": 0
           },
-          "selector": "0x2f865bd9"
+          "selector": "0x6ef4fdc3"
         },
         {
           "args": [
@@ -52,11 +52,11 @@
             }
           ],
           "docs": [],
-          "label": "add",
+          "label": "dodajObjavo",
           "mutates": true,
           "payable": false,
           "returnType": null,
-          "selector": "0x4b050ea9"
+          "selector": "0x3e6e2a8a"
         }
       ]
     },
