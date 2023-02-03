@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0x361f1862ead8cc10cbdba23d0e996be3c7733ccb0461d72ff9b53eceeb195570",
+    "hash": "0x145e3c6cf2dbfc54dfe7efd743a0312860e916944fca9eba5c0dcf3e4423390b",
     "language": "ink! 3.3.1",
     "compiler": "rustc 1.65.0-nightly"
   },
@@ -28,7 +28,7 @@
         {
           "args": [],
           "docs": [],
-          "label": "vseObjave",
+          "label": "get_posts",
           "mutates": false,
           "payable": false,
           "returnType": {
@@ -37,7 +37,21 @@
             ],
             "type": 0
           },
-          "selector": "0x6ef4fdc3"
+          "selector": "0x280d8cd3"
+        },
+        {
+          "args": [],
+          "docs": [],
+          "label": "get_users",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Vec"
+            ],
+            "type": 7
+          },
+          "selector": "0x528c868f"
         },
         {
           "args": [
@@ -47,16 +61,245 @@
                 "displayName": [
                   "String"
                 ],
-                "type": 5
+                "type": 3
+              }
+            },
+            {
+              "label": "username",
+              "type": {
+                "displayName": [
+                  "String"
+                ],
+                "type": 3
               }
             }
           ],
           "docs": [],
-          "label": "dodajObjavo",
+          "label": "add_post",
           "mutates": true,
           "payable": false,
           "returnType": null,
-          "selector": "0x3e6e2a8a"
+          "selector": "0x961c42d6"
+        },
+        {
+          "args": [
+            {
+              "label": "username",
+              "type": {
+                "displayName": [
+                  "String"
+                ],
+                "type": 3
+              }
+            },
+            {
+              "label": "is_mod",
+              "type": {
+                "displayName": [
+                  "bool"
+                ],
+                "type": 9
+              }
+            }
+          ],
+          "docs": [],
+          "label": "create_user",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0xf617bfd8"
+        },
+        {
+          "args": [
+            {
+              "label": "post_id",
+              "type": {
+                "displayName": [
+                  "u64"
+                ],
+                "type": 2
+              }
+            }
+          ],
+          "docs": [],
+          "label": "delete_post",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0x562c17f7"
+        },
+        {
+          "args": [
+            {
+              "label": "potential_friend_address",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 4
+              }
+            },
+            {
+              "label": "username",
+              "type": {
+                "displayName": [
+                  "String"
+                ],
+                "type": 3
+              }
+            }
+          ],
+          "docs": [],
+          "label": "send_friend_request",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0xcedea6a0"
+        },
+        {
+          "args": [
+            {
+              "label": "accepted",
+              "type": {
+                "displayName": [
+                  "bool"
+                ],
+                "type": 9
+              }
+            },
+            {
+              "label": "potential_friend_address",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [],
+          "label": "handle_friend_request",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0xc3b95357"
+        },
+        {
+          "args": [
+            {
+              "label": "former_friend_address",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [],
+          "label": "remove_friend",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0x1fb40ed9"
+        },
+        {
+          "args": [
+            {
+              "label": "user1",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 4
+              }
+            },
+            {
+              "label": "user2",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [],
+          "label": "create_chat",
+          "mutates": false,
+          "payable": false,
+          "returnType": null,
+          "selector": "0xe9809837"
+        },
+        {
+          "args": [
+            {
+              "label": "user1",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 4
+              }
+            },
+            {
+              "label": "user2",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 4
+              }
+            },
+            {
+              "label": "new_message",
+              "type": {
+                "displayName": [
+                  "String"
+                ],
+                "type": 3
+              }
+            }
+          ],
+          "docs": [],
+          "label": "send_message",
+          "mutates": false,
+          "payable": false,
+          "returnType": null,
+          "selector": "0xafdc403f"
+        },
+        {
+          "args": [
+            {
+              "label": "user1",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 4
+              }
+            },
+            {
+              "label": "user2",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [],
+          "label": "get_chat",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Vec"
+            ],
+            "type": 16
+          },
+          "selector": "0x7053c3a9"
         }
       ]
     },
@@ -70,7 +313,25 @@
                 "ty": 0
               }
             },
-            "name": "objave"
+            "name": "posts"
+          },
+          {
+            "layout": {
+              "cell": {
+                "key": "0x0100000000000000000000000000000000000000000000000000000000000000",
+                "ty": 7
+              }
+            },
+            "name": "users"
+          },
+          {
+            "layout": {
+              "cell": {
+                "key": "0x0200000000000000000000000000000000000000000000000000000000000000",
+                "ty": 14
+              }
+            },
+            "name": "chats"
           }
         ]
       }
@@ -93,18 +354,28 @@
             "composite": {
               "fields": [
                 {
-                  "name": "avtor",
+                  "name": "id",
                   "type": 2,
+                  "typeName": "u64"
+                },
+                {
+                  "name": "username",
+                  "type": 3,
+                  "typeName": "String"
+                },
+                {
+                  "name": "author",
+                  "type": 4,
                   "typeName": "AccountId"
                 },
                 {
-                  "name": "vsebina",
-                  "type": 5,
+                  "name": "content",
+                  "type": 3,
                   "typeName": "String"
                 },
                 {
                   "name": "timestamp",
-                  "type": 6,
+                  "type": 2,
                   "typeName": "u64"
                 }
               ]
@@ -113,7 +384,7 @@
           "path": [
             "objava",
             "blog",
-            "Objava"
+            "Post"
           ]
         }
       },
@@ -121,10 +392,26 @@
         "id": 2,
         "type": {
           "def": {
+            "primitive": "u64"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "type": {
+          "def": {
+            "primitive": "str"
+          }
+        }
+      },
+      {
+        "id": 4,
+        "type": {
+          "def": {
             "composite": {
               "fields": [
                 {
-                  "type": 3,
+                  "type": 5,
                   "typeName": "[u8; 32]"
                 }
               ]
@@ -138,29 +425,13 @@
         }
       },
       {
-        "id": 3,
+        "id": 5,
         "type": {
           "def": {
             "array": {
               "len": 32,
-              "type": 4
+              "type": 6
             }
-          }
-        }
-      },
-      {
-        "id": 4,
-        "type": {
-          "def": {
-            "primitive": "u8"
-          }
-        }
-      },
-      {
-        "id": 5,
-        "type": {
-          "def": {
-            "primitive": "str"
           }
         }
       },
@@ -168,8 +439,247 @@
         "id": 6,
         "type": {
           "def": {
-            "primitive": "u64"
+            "primitive": "u8"
           }
+        }
+      },
+      {
+        "id": 7,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 8
+            }
+          }
+        }
+      },
+      {
+        "id": 8,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "user_address",
+                  "type": 4,
+                  "typeName": "AccountId"
+                },
+                {
+                  "name": "username",
+                  "type": 3,
+                  "typeName": "String"
+                },
+                {
+                  "name": "is_mod",
+                  "type": 9,
+                  "typeName": "bool"
+                },
+                {
+                  "name": "friend_requests",
+                  "type": 10,
+                  "typeName": "Vec<FriendRequest>"
+                },
+                {
+                  "name": "friends",
+                  "type": 12,
+                  "typeName": "Vec<Friend>"
+                }
+              ]
+            }
+          },
+          "path": [
+            "objava",
+            "blog",
+            "User"
+          ]
+        }
+      },
+      {
+        "id": 9,
+        "type": {
+          "def": {
+            "primitive": "bool"
+          }
+        }
+      },
+      {
+        "id": 10,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 11
+            }
+          }
+        }
+      },
+      {
+        "id": 11,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "user_address",
+                  "type": 4,
+                  "typeName": "AccountId"
+                },
+                {
+                  "name": "username",
+                  "type": 3,
+                  "typeName": "String"
+                }
+              ]
+            }
+          },
+          "path": [
+            "objava",
+            "blog",
+            "FriendRequest"
+          ]
+        }
+      },
+      {
+        "id": 12,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 13
+            }
+          }
+        }
+      },
+      {
+        "id": 13,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "user_address",
+                  "type": 4,
+                  "typeName": "AccountId"
+                },
+                {
+                  "name": "username",
+                  "type": 3,
+                  "typeName": "String"
+                }
+              ]
+            }
+          },
+          "path": [
+            "objava",
+            "blog",
+            "Friend"
+          ]
+        }
+      },
+      {
+        "id": 14,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "offset_key",
+                  "type": 18,
+                  "typeName": "Key"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "K",
+              "type": 15
+            },
+            {
+              "name": "V",
+              "type": 16
+            }
+          ],
+          "path": [
+            "ink_storage",
+            "lazy",
+            "mapping",
+            "Mapping"
+          ]
+        }
+      },
+      {
+        "id": 15,
+        "type": {
+          "def": {
+            "tuple": [
+              4,
+              4
+            ]
+          }
+        }
+      },
+      {
+        "id": 16,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 17
+            }
+          }
+        }
+      },
+      {
+        "id": 17,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "from",
+                  "type": 4,
+                  "typeName": "AccountId"
+                },
+                {
+                  "name": "to",
+                  "type": 4,
+                  "typeName": "AccountId"
+                },
+                {
+                  "name": "content",
+                  "type": 3,
+                  "typeName": "String"
+                },
+                {
+                  "name": "timestamp",
+                  "type": 2,
+                  "typeName": "u64"
+                }
+              ]
+            }
+          },
+          "path": [
+            "objava",
+            "blog",
+            "Message"
+          ]
+        }
+      },
+      {
+        "id": 18,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "type": 5,
+                  "typeName": "[u8; 32]"
+                }
+              ]
+            }
+          },
+          "path": [
+            "ink_primitives",
+            "Key"
+          ]
         }
       }
     ]

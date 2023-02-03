@@ -1,103 +1,130 @@
 import './App.css';
 import * as metadata from "./metadata.json"
 import { useState, useEffect } from 'react';
-import { Objava } from './Components/ObjavaComponent/ObjavaComponent'
 import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';
 import { WsProvider, ApiPromise } from '@polkadot/api';
 import { ContractPromise } from '@polkadot/api-contract'
+import { ModeratorAddress, ContractAddress, GasLimit, CurrentAccount } from './config.js'
+import SwitcherComponent from './Components/SwitcherComponent/SwitcherComponent';
 
 function App() {
-  const contractAddress = '5Cbba5zdy9xMfgRjJMW9oHYRtoPSL16xYrp7R8yNYoEzDGV4';
-
   const [dataList, setDataList] = useState([]);
   const [input, setInput] = useState('');
   const [account, setAccount] = useState('');
-
-  let gasLimit = -1;
+  const [contract, setContract] = useState([]);
+  const [injector, setInjector] = useState([]);
+  const [currentUser, setCurrentUser] = useState('');
+  const [isMod, setIsMod] = useState(false);
+  const [showTextarea, setShowTextArea] = useState(false);
+  const [newUsername, setNewUsername] = useState('');
+  const [username, setUsername] = useState('');
 
   const orderPosts = (accounts) => {
     console.log(accounts.slice());
     return accounts.slice().sort((a, b) => b['timestamp'] - a['timestamp'])
   }
 
-  async function connectExtension() {    
+  const connectExtension = async() => {    
     await web3Enable('Polkadot Blogchain');
     const allAccounts = await web3Accounts();
-    setAccount(allAccounts[0]);
+    const selectedAccount = allAccounts.filter(account => account['address'] === CurrentAccount);
+    setAccount(selectedAccount[0]);
+    await connectContract();
   }
 
-  async function connectContract() {
-    let ws = new WsProvider("ws://localhost:9944");
-    let api = await ApiPromise.create({ provider: ws });
-    let contract = new ContractPromise(api, metadata, contractAddress);
-
-    return contract;
-  }
-
-  async function updatePosts() {
-    if (!input) return
-
-    const contract = await connectContract();
+  const connectContract = async () => {
+    const ws = new WsProvider("ws://localhost:9944");
+    const api = await ApiPromise.create({ provider: ws });
+    const contract = new ContractPromise(api, metadata, ContractAddress);
     const injector = await web3FromSource(account.meta.source);
-
-    await contract.tx.dodajObjavo({ gasLimit }, input ).signAndSend(account.address, { signer: injector.signer });
-
-    setInput('');
-    getPosts();
+    
+    setContract(contract);
+    setInjector(injector);
   }
 
-  async function getPosts() {
-    const contract = await connectContract();
-    let { output } = await contract.query.vseObjave(account.address, { gasLimit });
-    setDataList(orderPosts(output));
+  const createUser = async () => {
+    if(!newUsername) return;
+
+    let user = [];
+    let isMod = JSON.stringify(ModeratorAddress) === JSON.stringify(account.address);
+    await contract.tx.createUser({ GasLimit }, newUsername, isMod).signAndSend(account.address, { signer: injector.signer });
+    
+    while (user.length != 1)
+    {
+      const {output} = await contract.query.getUsers(account.address, { GasLimit });
+      user = output.filter(user => JSON.stringify(user['userAddress']) === JSON.stringify(account.address));
+    }
+
+    setCurrentUser(user[0]);
+    setUsername(user[0]['username']);
+    setIsMod(user[0]['isMod']);
+    setNewUsername('');
+    setShowTextArea(false);
   }
 
-  useEffect(()=>{
-    getPosts();
-  }, [])
+  const doesUserExist = async () => {
+    const {output} = await contract.query.getUsers(account.address, { GasLimit });
+    const user = output.filter(user => JSON.stringify(user['userAddress']) === JSON.stringify(account.address));
 
-  if (account == '') 
+    if (user.length === 1)
+    {
+      setCurrentUser(user[0]);
+      setUsername(user[0]['username']);
+      setIsMod(user[0]['isMod']);
+      setShowTextArea(false);
+    }
+    else if (user.length > 1)
+    {
+      throw new Error("More than one user with this address found.")
+    }
+    else
+    {
+      setShowTextArea(true);
+    }
+  }
+
+  useEffect(() => {
+    connectContract();
+  }, [account]);
+  
+  useEffect(() => {
+    doesUserExist();
+  });
+
+  if (currentUser === '')
+  {
+    return (<div>
+              <div className='header'>
+                <h1>POLKADOT BLOGCHAIN</h1>
+              </div>
+              <div>
+                { showTextarea ? <div className='sign-up-panel'>
+                                    <p style={{textAlign: 'center'}}>Please pick a username:</p> <br />
+                                    <textarea
+                                      id='username' 
+                                      type="text"
+                                      placeholder="Username"
+                                      onChange={e => setNewUsername(e.target.value)}
+                                      rows="8" cols="50"
+                                    /> 
+                                    <button onClick={createUser}>SIGN UP</button> 
+                                  </div> : 
+                                  <div>
+                                    <p style={{textAlign: 'center'}}>Please connect your Phantom Wallet to continue:</p>
+                                    <div style={{ display: 'flex', justifyContent: 'center', marginTop:'20px' }}>
+                                    <button onClick={connectExtension}>CONNECT EXTENSION</button>
+                                    </div>
+                                  </div>}
+              </div>
+            </div>)
+  }
+  else
   {
     return (
       <div>
-        <h1 style={{textAlign: 'center'}}>POLKADOT BLOGCHAIN</h1>
-        <p style={{textAlign: 'center'}}>Please connect the Polkadot.js browser extension to continue:</p>
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop:'20px' }}>
-          <button onClick={connectExtension}>CONNECT POLKADOT.js EXTENSION</button>
-        </div>
+        <SwitcherComponent key={currentUser} currentUser={currentUser} isMod={isMod} contract={contract} gasLimit={GasLimit} account={account} injector={injector}/>
       </div>
     )
-  } 
-  else 
-  {
-    return (
-      <div className="App">
-        <div>
-          {
-            (
-              <div className='nova-objava'>
-                <h1>POLKADOT BLOGCHAIN</h1>
-                <textarea 
-                  type="text"
-                  placeholder="Vnesi novo objavo"
-                  onChange={e => setInput(e.target.value)}
-                  value={input}
-                  rows="8" cols="50"
-                />
-                <br/>
-                <button onClick={updatePosts}>OBJAVI</button>
-              </div>
-            )
-          }
-          {
-            dataList.map(objava => 
-            <Objava avtor={objava['avtor'].toString()} 
-                    vsebina={objava['vsebina']} 
-                    timestamp={new Date(parseInt(objava['timestamp'].toString())).toLocaleString()} />)
-          }
-        </div>
-      </div>
-    );
   }
 }
 
