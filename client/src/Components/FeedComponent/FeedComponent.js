@@ -19,14 +19,15 @@ export default function FeedComponent(props) {
     const addPost = async () => {
       if (!input) return
 
-      await contract.tx.addPost({ gasLimit }, input, currentUser['username'] ).signAndSend(account.address, { signer: injector.signer });
+      await contract.tx
+      .addPost({ gasLimit }, input, currentUser['username'] )
+      .signAndSend(account.address, { signer: injector.signer });
       setInput('');
     }
 
     const getPosts = async () => {
       let { output } = await contract.query.getPosts(account.address, { gasLimit });
       setPosts(orderPosts(output));
-      return output;
     }
 
     const orderPosts = (posts) => {
