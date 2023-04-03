@@ -23,6 +23,11 @@ mod blog {
         chats: Mapping<(AccountId, AccountId), Vec<Message>>
     }
 
+    #[ink(event)]
+    pub struct UserCreated {
+        username: String
+    }
+
     #[cfg_attr(feature = "std", derive(scale_info::TypeInfo))]
     #[derive(PackedLayout, SpreadLayout, SpreadAllocate, Encode, Decode, Clone)]
     pub struct Post {
@@ -118,8 +123,6 @@ mod blog {
 
         #[ink(message)]
         pub fn add_post(&mut self, new_message: String, username: String) {
-            log::info!("{}", new_message);
-
             self.posts.push(Post{
                 id: self.posts.len() as u64,
                 username: username,
@@ -131,6 +134,11 @@ mod blog {
 
         #[ink(message)]
         pub fn create_user(&mut self, username: String, is_mod: bool) {
+
+            Self::env().emit_event(UserCreated{
+                username: username.clone()
+            });
+
             self.users.push(User{
                 user_address: self.env().caller(),
                 username: username,
